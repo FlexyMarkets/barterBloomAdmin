@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    role: localStorage.getItem("role") || null
+    role: localStorage.getItem("role") || null,
+    selectedReferralCode: localStorage.getItem("selectedReferralCode") || null,
 };
 
 const adminStateSlice = createSlice({
@@ -12,8 +13,12 @@ const adminStateSlice = createSlice({
             state.role = action.payload
             localStorage.setItem("role", action.payload)
         },
+        setSelectedReferralCode: (state, action) => {
+            localStorage.setItem("selectedReferralCode", action.payload)
+            state.selectedReferralCode = action.payload
+        },
     }
 });
 
-export const { setRole } = adminStateSlice.actions;
+export const { setRole, setSelectedReferralCode } = adminStateSlice.actions;
 export default adminStateSlice.reducer;

@@ -1,5 +1,5 @@
 import { createMRTColumnHelper } from 'material-react-table';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,9 +51,11 @@ export const UserListColumnHeader = [
     columnHelper.display({
         header: 'Action',
         size: 50,
-        Cell: () => {
+        Cell: ({ row }) => {
             const navigate = useNavigate()
-            return < EditIcon onClick={navigate("/dashboard/userManagement/editUser")} />
+            return <IconButton onClick={() => navigate(`/dashboard/userManagement/editUser/${row.original._id}`)}>
+                < EditIcon />
+            </IconButton>
         }
     })
 ];

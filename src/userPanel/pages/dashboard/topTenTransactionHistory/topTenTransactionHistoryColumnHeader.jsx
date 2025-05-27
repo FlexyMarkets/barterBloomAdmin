@@ -1,16 +1,15 @@
 import { createMRTColumnHelper } from 'material-react-table';
-import { Typography, Skeleton } from '@mui/material';
-import { useGetUserProfileQuery } from '../../../../globalState/settings/profileSettingApi';
+import { Typography } from '@mui/material';
 
 const columnHelper = createMRTColumnHelper();
 
 export const topTenTransactionHistoryColumnHeader = [
+
     columnHelper.display({
-        header: 'Login ID',
-        size: 40,
-        Cell: () => {
-            const { data, isLoading } = useGetUserProfileQuery()
-            return < Typography >{isLoading ? <Skeleton width={100} height={30} /> : data?.data?.loginId || "Empty"}</Typography >
+        header: 'Name',
+        size: 150,
+        Cell: ({ row }) => {
+            return < Typography >{row?.original?.user?.name}</Typography >
         },
     }),
     columnHelper.accessor('balanceType', {
@@ -19,7 +18,7 @@ export const topTenTransactionHistoryColumnHeader = [
     }),
     columnHelper.accessor('transactionType', {
         header: 'Transaction Type',
-        size: 150,
+        size: 250,
     }),
     columnHelper.accessor('amount', {
         header: 'Amount',

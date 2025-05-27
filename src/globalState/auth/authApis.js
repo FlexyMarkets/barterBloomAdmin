@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { login, setUserData } from "./authSlice";
-import { setRole } from "../admin/adminStateSlice";
 
 export const authApi = createApi({
     reducerPath: "authApi",

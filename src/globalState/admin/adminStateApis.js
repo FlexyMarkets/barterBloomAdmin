@@ -16,7 +16,7 @@ export const adminStateApis = createApi({
     endpoints: (builder) => ({
         addFund: builder.mutation({
             query: (data) => ({
-                url: "/admin/transaction/deposit/usdt",
+                url: "/transaction/deposit/usdt",
                 method: "POST",
                 body: data
             })
@@ -53,10 +53,102 @@ export const adminStateApis = createApi({
             keepUnusedDataFor: 60,
             refetchOnMountOrArgChange: true,
         }),
+        getUserById: builder.query({
+            query: ({ id }) => `/user/${id}`,
+        }),
+        userProfileUpdate: builder.mutation({
+            query: (data) => ({
+                url: "/user/update",
+                method: "PUT",
+                body: data
+            })
+        }),
+        transactionList: builder.query({
+            query: ({ page = 1, sizePerPage = 10, status, fromUserId, userId, startDate, endDate }) => {
+                const params = {};
+                if (page > 0) params.page = page;
+                if (sizePerPage > 0) params.sizePerPage = sizePerPage;
+                if (status) params.status = status;
+                if (fromUserId) params.fromUserId = fromUserId;
+                if (userId) params.userId = userId;
+                if (startDate) params.startDate = startDate;
+                if (endDate) params.endDate = endDate;
+
+                return {
+                    url: "/transaction/list",
+                    params,
+                };
+            },
+
+            providesTags: (result) => {
+                const data = result?.data?.docs || []
+                return data.length > 0
+                    ?
+                    [
+                        ...data.map(({ id }) => ({ type: 'userList', id })),
+                        { type: 'userList', id: 'PARTIAL-LIST' },
+                    ]
+                    :
+                    [{ type: 'userList', id: 'PARTIAL-LIST' }]
+            },
+            keepUnusedDataFor: 60,
+            refetchOnMountOrArgChange: true,
+        }),
+        getReferralInfo: builder.query({
+            query: ({ referralCode }) => {
+
+                const params = {};
+                if (referralCode) params.referralCode = referralCode;
+
+                return {
+                    url: "/user/details",
+                    params,
+                };
+
+            }
+        }),
+        userTransactionPasswordUpdate: builder.mutation({
+            query: (data) => ({
+                url: "/user/change/trx/password",
+                method: "PUT",
+                body: data
+            })
+        }),
+        userLoginPasswordUpdate: builder.mutation({
+            query: (data) => ({
+                url: "/user/change/login/password",
+                method: "PUT",
+                body: data
+            })
+        }),
+        getReferralList: builder.query({
+            query: ({ userId }) => {
+
+                const params = {};
+                if (userId) params.userId = userId;
+
+                return {
+                    url: "/user/referral/tree",
+                    params,
+                };
+
+            }
+        }),
+        getDashboardData: builder.query({
+            query: () => `/dashboard`,
+        }),
     })
 })
 
 export const {
     useAddFundMutation,
-    useUserListQuery
+    useUserListQuery,
+    useGetUserByIdQuery,
+    useUserProfileUpdateMutation,
+    useTransactionListQuery,
+    useGetReferralInfoQuery,
+    useUserTransactionPasswordUpdateMutation,
+    useUserLoginPasswordUpdateMutation,
+    useGetReferralListQuery,
+    useGetDashboardDataQuery
 } = adminStateApis;

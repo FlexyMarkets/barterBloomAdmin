@@ -83,7 +83,7 @@ function MenuComponent({ Icon, userData }) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem sx={{
+                {/* <MenuItem sx={{
                     flexDirection: "column",
                     alignItems: "flex-start",
                     py: 0
@@ -91,16 +91,11 @@ function MenuComponent({ Icon, userData }) {
                     <Typography>Name: {userData?.name}</Typography>
                     <Typography>Rank: {userData?.rank}</Typography>
                 </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose} component={Link} to={"/dashboard/setting/profile"}>
-                    <ListItemIcon>
-                        <PermIdentityOutlinedIcon fontSize="small" />
-                    </ListItemIcon> Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose} component={Link} to={"/dashboard/transaction"}>
+                <Divider /> */}
+                <MenuItem onClick={handleClose} component={Link} to={"/dashboard/transactionList"}>
                     <ListItemIcon>
                         <ReceiptLongIcon fontSize="small" />
-                    </ListItemIcon> My transactions
+                    </ListItemIcon> All transactions
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLogOut}>

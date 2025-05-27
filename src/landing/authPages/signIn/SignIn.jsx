@@ -39,7 +39,7 @@ function SignIn() {
     const [signIn, { isLoading }] = useSignInMutation();
 
     const defaultValues = {
-        loginId: "",
+        email: "",
         password: "",
     };
 
@@ -109,11 +109,11 @@ function SignIn() {
                 >
                     <Typography variant="h4" fontWeight="bold" align="center" color="white">Sign In</Typography>
                     <Box>
-                        <InputLabel sx={{ mb: ".5rem", color: "white", fontSize: "14px" }}>Login Id</InputLabel>
+                        <InputLabel sx={{ mb: ".5rem", color: "white", fontSize: "14px" }}>Email</InputLabel>
                         <OutlinedInput
                             size="small"
-                            {...register("loginId", { required: true })}
-                            placeholder='LogIn id'
+                            {...register("email", { required: true })}
+                            placeholder='Email'
                             fullWidth
                             startAdornment={<InputAdornment position="start"><PersonIcon sx={{ color: '#8703ef', fontSize: "20px" }} /></InputAdornment>}
                             sx={{ ...inputStyles }}

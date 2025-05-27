@@ -5,7 +5,6 @@ import {
 import {
   Box,
   Button,
-  Container,
   Typography,
   Stack,
   InputLabel,
@@ -13,14 +12,15 @@ import {
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import * as XLSX from 'xlsx';
 import { useState, useMemo, useCallback } from 'react';
-import { transactionListHeaderColumn } from './TransactionListHeaderColumn';
-import { useTransactionListQuery } from '../../../globalState/admin/adminStateApis';
-// import Selector from '../../../components/Selector';
-import Selector from '../../userPanelComponent/Selector';
+import { UserTransactionHistoryColumnHeader } from "./UserTransactionHistoryColumnHeader"
+import { useTransactionListQuery } from '../../../../../globalState/admin/adminStateApis';
+import { useParams } from 'react-router-dom';
+import Selector from '../../../../userPanelComponent/Selector';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+
 
 const STATUS_OPTIONS = ["PENDING", "COMPLETED", "REJECTED"];
 
@@ -31,7 +31,9 @@ const handleExportToExcel = (rows) => {
   XLSX.writeFile(workbook, 'transactionList.xlsx');
 };
 
-function TransactionList() {
+function UserTransactionHistoryList() {
+
+  const { id } = useParams()
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [filters, setFilters] = useState({
@@ -44,18 +46,24 @@ function TransactionList() {
   const formattedFromDate = filters.fromDate ? dayjs(filters.fromDate).format('YYYY-MM-DD') : undefined;
   const formattedToDate = filters.toDate ? dayjs(filters.toDate).format('YYYY-MM-DD') : undefined;
 
-  const { data: listData, isLoading, isError } = useTransactionListQuery({
-    page: pagination.pageIndex + 1,
-    sizePerPage: pagination.pageSize,
-    ...filters,
-    startDate: formattedFromDate,
-    endDate: formattedToDate,
-  });
+  const { data: listData, isLoading, isError } = useTransactionListQuery(
+    {
+      page: pagination.pageIndex + 1,
+      sizePerPage: pagination.pageSize,
+      userId: id,
+      ...filters,
+      startDate: formattedFromDate,
+      endDate: formattedToDate,
+    },
+    {
+      skip: !id
+    }
+  );
 
-  const transactionsListData = listData?.data?.docs || [];
+  const userTransactionsListData = listData?.data?.docs || [];
 
-  const columns = useMemo(() => transactionListHeaderColumn, []);
-  const data = useMemo(() => transactionsListData, [transactionsListData]);
+  const columns = useMemo(() => UserTransactionHistoryColumnHeader, []);
+  const data = useMemo(() => userTransactionsListData, [userTransactionsListData]);
 
   const table = useMaterialReactTable({
     columns,
@@ -108,29 +116,29 @@ function TransactionList() {
   }, []);
 
   return (
-    <Container sx={{ mt: "100px" }}>
-      <Typography variant='h5' fontWeight={700} fontSize="1.8rem" mb={4}>
-        Transaction List
+    <Stack sx={{ mt: "30px" }}>
+      <Typography variant='h5' fontWeight={700} fontSize="1.5rem" mb={4}>
+        Transaction history
       </Typography>
-
-      <Box sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column', lg: 'row' },
-        gap: 2,
-        flexWrap: 'wrap',
-        mb: 4,
-      }}>
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
-          <Stack>
-            <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Status</InputLabel>
-            <Selector
-              items={STATUS_OPTIONS}
-              value={filters.status}
-              onChange={(e) => handleFilterChange('status', e.target.value)}
-              width={{ xs: '100%', sm: 200 }}
-            />
-          </Stack>
-          {/* <Stack>
+      <Stack>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', lg: 'row' },
+          gap: 2,
+          flexWrap: 'wrap',
+          mb: 4,
+        }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+            <Stack>
+              <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Status</InputLabel>
+              <Selector
+                items={STATUS_OPTIONS}
+                value={filters.status}
+                onChange={(e) => handleFilterChange('status', e.target.value)}
+                width={{ xs: '100%', sm: 200 }}
+              />
+            </Stack>
+            {/* <Stack>
             <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Transaction Type</InputLabel>
             <Selector
               items={TRANSACTION_TYPES}
@@ -139,40 +147,40 @@ function TransactionList() {
               width={{ xs: '100%', sm: 200 }}
             />
           </Stack> */}
-        </Box>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
-            <Stack>
-              <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>From</InputLabel>
-              <DatePicker
-                value={filters.fromDate}
-                onChange={(newValue) => handleFilterChange('fromDate', newValue)}
-                slotProps={{
-                  textField: { size: 'small' },
-                  field: { clearable: true },
-                }}
-              />
-            </Stack>
-            <Stack>
-              <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>To</InputLabel>
-              <DatePicker
-                value={filters.toDate}
-                onChange={(newValue) => handleFilterChange('toDate', newValue)}
-                slotProps={{
-                  textField: { size: 'small' },
-                  field: { clearable: true },
-                }}
-              />
-            </Stack>
           </Box>
-        </LocalizationProvider>
-      </Box>
-
-      <Stack sx={{ mt: 4, borderRadius: 2, overflow: 'hidden' }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+              <Stack>
+                <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>From</InputLabel>
+                <DatePicker
+                  value={filters.fromDate}
+                  onChange={(newValue) => handleFilterChange('fromDate', newValue)}
+                  slotProps={{
+                    textField: { size: 'small' },
+                    field: { clearable: true },
+                  }}
+                />
+              </Stack>
+              <Stack>
+                <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>To</InputLabel>
+                <DatePicker
+                  value={filters.toDate}
+                  onChange={(newValue) => handleFilterChange('toDate', newValue)}
+                  slotProps={{
+                    textField: { size: 'small' },
+                    field: { clearable: true },
+                  }}
+                />
+              </Stack>
+            </Box>
+          </LocalizationProvider>
+        </Box>
+      </Stack>
+      <Stack sx={{ mt: 2, borderRadius: 2, overflow: 'hidden' }}>
         <MaterialReactTable table={table} />
       </Stack>
-    </Container>
+    </Stack>
   );
 };
 
-export default TransactionList;
+export default UserTransactionHistoryList;

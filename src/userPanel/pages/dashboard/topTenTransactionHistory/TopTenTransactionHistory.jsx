@@ -1,19 +1,3 @@
-// import { Stack, Typography, Container } from "@mui/material";
-// import TopTenTransactionHistoryTable from "./topTenTransactionHistoryTable/TopTenTransactionHistoryTable";
-
-// function TopTenTransactionHistory() {
-//   return (
-//     <Stack>
-//       <Container><Typography variant="h6" fontWeight="bold">Top 10 transaction history</Typography></Container>
-//       <TopTenTransactionHistoryTable />
-//     </Stack>
-//   )
-// }
-
-// export default TopTenTransactionHistory;
-
-
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -23,18 +7,13 @@ import {
   Button,
   Container,
   Typography,
-  Stack,
-  InputLabel,
+  Stack
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import * as XLSX from 'xlsx';
-import { useSelector } from 'react-redux';
-import { useState, useMemo, useCallback } from 'react';
-import { useTransactionsListQuery } from '../../../../globalState/walletState/walletStateApis';
 import { topTenTransactionHistoryColumnHeader } from './topTenTransactionHistoryColumnHeader';
-
-const STATUS_OPTIONS = ["PENDING", "COMPLETED", "PROCESSING", "REJECTED"];
-// const TRANSACTION_TYPES = ["DEPOSIT", "STAKE-IN", "WITHDRAW", "REVERCED-USER", "REWARD", REFERRAL-INCOME, SYSTEM-REWARD, STAKING-REWARD, NETWORK-BONUS, SWAP-CMN-TO-CUSD, SWAP-CUSD-TO-CMN, INTERNAL-TRANSFER, GENERATION-REWARD, CONVERT-REWARD, BURN];
+import { useTransactionListQuery } from '../../../../globalState/admin/adminStateApis';
+import { useState } from 'react';
 
 const handleExportToExcel = (rows) => {
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -45,9 +24,11 @@ const handleExportToExcel = (rows) => {
 
 function TopTenTransactionHistory() {
 
-  const { data: listData, isLoading, isError } = useTransactionsListQuery({
-    // page: pagination.pageIndex + 1,
-    // sizePerPage: pagination.pageSize,
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+
+  const { data: listData, isLoading, isError } = useTransactionListQuery({
+    page: pagination.pageIndex + 1,
+    sizePerPage: pagination.pageSize
   });
 
   const transactionsListData = listData?.data?.docs || [];
@@ -58,53 +39,49 @@ function TopTenTransactionHistory() {
     enableColumnFilters: false,
     enableSorting: false,
     enableColumnActions: false,
-    manualPagination: true,
     manualFiltering: true,
-    rowCount: listData?.data?.totalRecords || 0,
+    rowCount: listData?.data?.totalDocs || 0,
     state: {
-      // pagination,
       isLoading,
       showAlertBanner: isError,
     },
-    // onPaginationChange: setPagination,
-    enablePagination: false,
     columnFilterDisplayMode: "popover",
     enableGlobalFilter: false,
-    paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
-    // renderTopToolbarCustomActions: () => (
-    //   <Box
-    //     sx={{
-    //       display: 'flex',
-    //       gap: 2,
-    //       padding: 1,
-    //       flexWrap: 'wrap',
-    //     }}
-    //   >
-    //     <Button
-    //       variant="contained"
-    //       onClick={() => handleExportToExcel(transactionsListData)}
-    //       startIcon={<FileDownloadIcon sx={{ color: "white" }} />}
-    //       sx={{
-    //         textTransform: 'none',
-    //         color: 'white',
-    //         boxShadow: 'none',
-    //         bgcolor: "primary.main",
-    //         '&:hover': { boxShadow: 'none' },
-    //       }}
-    //     >
-    //       Excel
-    //     </Button>
-    //   </Box>
-    // ),
+    enablePagination: false,
+    renderTopToolbarCustomActions: () => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 2,
+          padding: 1,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={() => handleExportToExcel(transactionsListData)}
+          startIcon={<FileDownloadIcon sx={{ color: "white" }} />}
+          sx={{
+            textTransform: 'none',
+            color: 'white',
+            boxShadow: 'none',
+            bgcolor: "primary.main",
+            '&:hover': { boxShadow: 'none' },
+          }}
+        >
+          Excel
+        </Button>
+      </Box>
+    ),
   });
 
   return (
-    <Container sx={{ mt: "3rem" }}>
+    <Container sx={{ mt: "30px" }}>
       <Typography variant='h5' fontWeight={700} fontSize="1.8rem" mb={4}>
-        Top 10 transaction list
+        Transaction List
       </Typography>
-      <Stack sx={{ borderRadius: 2, overflow: 'hidden' }}>
+      <Stack sx={{ mt: 2, borderRadius: 2, overflow: 'hidden' }}>
         <MaterialReactTable table={table} />
       </Stack>
     </Container>

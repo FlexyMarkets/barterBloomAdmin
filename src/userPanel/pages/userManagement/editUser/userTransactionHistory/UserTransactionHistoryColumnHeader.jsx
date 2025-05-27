@@ -1,24 +1,23 @@
 import { createMRTColumnHelper } from 'material-react-table';
-import { Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 
 const columnHelper = createMRTColumnHelper();
 
-export const transactionListHeaderColumn = [
-
-    columnHelper.display({
-        header: 'Name',
-        size: 150,
-        Cell: ({ row }) => {
-            return < Typography >{row?.original?.user?.name}</Typography >
-        },
-    }),
+export const UserTransactionHistoryColumnHeader = [
     columnHelper.accessor('balanceType', {
         header: 'Balance Type',
         size: 120,
     }),
     columnHelper.accessor('transactionType', {
         header: 'Transaction Type',
-        size: 250,
+        size: 150,
+    }),
+    columnHelper.display({
+        header: 'From user',
+        size: 150,
+        Cell: ({ row }) => {
+            return <Typography>{row.original.user.name}</Typography>
+        }
     }),
     columnHelper.accessor('amount', {
         header: 'Amount',
