@@ -10,7 +10,7 @@ function Details() {
 
     const { data, isLoading } = useGetDashboardDataQuery()
 
-    const dashboardData = data?.data
+    const dashboardData = data?.data?.[0]
 
     const income = {
         "Main balance": dashboardData?.totalBUSDBalance,
