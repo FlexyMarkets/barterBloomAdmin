@@ -25,19 +25,18 @@ export const UserListColumnHeader = [
     }),
     columnHelper.accessor('BUSDBalance', {
         header: 'Main balance',
-        size: 50,
+    }),
+    columnHelper.accessor('totalStakedBalance', {
+        header: 'Total staked balance',
     }),
     columnHelper.accessor('TRADEBalance', {
         header: 'Trade balance',
-        size: 50,
     }),
     columnHelper.accessor('AFFLIATEBalance', {
         header: 'Affliate balance',
-        size: 50,
     }),
-    columnHelper.accessor('airDorpLevel', {
-        header: 'Air dorp level',
-        size: 50,
+    columnHelper.accessor('PACKAGEBalance', {
+        header: 'Package balance',
     }),
     columnHelper.accessor('createdAt', {
         header: 'Registration Date',

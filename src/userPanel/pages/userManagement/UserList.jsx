@@ -9,6 +9,7 @@ import {
     Typography,
     Stack,
     InputLabel,
+    TextField,
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import * as XLSX from 'xlsx';
@@ -57,6 +58,8 @@ function UserList() {
         startDate: formattedFromDate,
         endDate: formattedToDate,
     });
+
+    console.log(isError)
 
     const userListData = listData?.data?.docs || [];
 
@@ -131,26 +134,26 @@ function UserList() {
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
                     <Stack>
                         <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Greater than</InputLabel>
-                        <Selector
-                            items={[]}
+                        <TextField
+                            type="number"
+                            size='small'
                             value={filters.greaterThan}
                             onChange={(e) => handleFilterChange('greaterThan', e.target.value)}
-                            width={{ xs: '100%', sm: 200 }}
                         />
                     </Stack>
                     <Stack>
                         <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Less than</InputLabel>
-                        <Selector
-                            items={[]}
+                        <TextField
+                            type="number"
+                            size='small'
                             value={filters.lessThan}
                             onChange={(e) => handleFilterChange('lessThan', e.target.value)}
-                            width={{ xs: '100%', sm: 200 }}
                         />
                     </Stack>
                     <Stack>
                         <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Type</InputLabel>
                         <Selector
-                            items={[]}
+                            items={["BUSDBalance", "totalStakedBalance"]}
                             value={filters.type}
                             onChange={(e) => handleFilterChange('type', e.target.value)}
                             width={{ xs: '100%', sm: 200 }}

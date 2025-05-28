@@ -64,11 +64,12 @@ export const adminStateApis = createApi({
             })
         }),
         transactionList: builder.query({
-            query: ({ page = 1, sizePerPage = 10, status, fromUserId, userId, startDate, endDate }) => {
+            query: ({ page = 1, sizePerPage = 10, status, transactionType, fromUserId, userId, startDate, endDate }) => {
                 const params = {};
                 if (page > 0) params.page = page;
                 if (sizePerPage > 0) params.sizePerPage = sizePerPage;
                 if (status) params.status = status;
+                if (transactionType) params.transactionType = transactionType;
                 if (fromUserId) params.fromUserId = fromUserId;
                 if (userId) params.userId = userId;
                 if (startDate) params.startDate = startDate;

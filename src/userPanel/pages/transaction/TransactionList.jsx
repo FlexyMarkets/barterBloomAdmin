@@ -21,8 +21,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { useUserListQuery } from '../../../globalState/admin/adminStateApis';
 
 const STATUS_OPTIONS = ["PENDING", "COMPLETED", "REJECTED"];
+const transaction_Type = ["BURN", "DEPOSIT", "TRADE", "WITHDRAW", "CONVERT-REWARD", "PROFIT-SHARING-INCOME", "SIGNUP-BONUS", "LEVEL-AIR-DROP", "REFERAL-INCOME", "FUND-TRANSFER", "RANK-REWARD", "RANK-UPGRADE-BONUS", "DELEGATED-REWARD", "SWAP-MAIN-TO-TRADE", "SWAP-AFFLIATE-TO-TRADE"];
 
 const handleExportToExcel = (rows) => {
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -51,6 +53,14 @@ function TransactionList() {
     startDate: formattedFromDate,
     endDate: formattedToDate,
   });
+
+  // const { data: userListData, isLoading: userDataLoading } = useUserListQuery({
+  //   page: 0,
+  //   sizePerPage: 5,
+  //   // search:
+  // });
+
+  // console.log(userListData)
 
   const transactionsListData = listData?.data?.docs || [];
 
@@ -130,13 +140,28 @@ function TransactionList() {
               width={{ xs: '100%', sm: 200 }}
             />
           </Stack>
-          {/* <Stack>
-            <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Transaction Type</InputLabel>
+          <Stack>
+            <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>Transaction type</InputLabel>
             <Selector
-              items={TRANSACTION_TYPES}
+              items={transaction_Type}
               value={filters.transactionType}
               onChange={(e) => handleFilterChange('transactionType', e.target.value)}
               width={{ xs: '100%', sm: 200 }}
+            />
+          </Stack>
+          {/* <Stack>
+            <InputLabel sx={{ mb: 0.5, fontSize: 12 }}>User name</InputLabel>
+            <SearchableSelector
+              width="100%"
+              items={clientListData.map((item) => ({
+                value: item.id,
+                name: `${item.name} (${item.email})`
+              }))}
+              value={watch("userId")}
+              onChange={(val) => setValue("userId", val, { shouldValidate: true })}
+              onSearchChange={(val) => setSearchClient(val)}
+              isLoading={userListLoading}
+              shouldBeFullwidth={true}
             />
           </Stack> */}
         </Box>
