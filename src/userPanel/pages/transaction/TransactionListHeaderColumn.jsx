@@ -1,5 +1,8 @@
 import { createMRTColumnHelper } from 'material-react-table';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import ModalComponent from "../../userPanelComponent/ModalComponent"
+import { Link } from 'react-router-dom';
+import EditTransaction from './EditTransaction';
 
 const columnHelper = createMRTColumnHelper();
 
@@ -40,5 +43,24 @@ export const transactionListHeaderColumn = [
                 {new Date(row.original.createdAt).toLocaleString()}
             </Typography>
         ),
+    }),
+    columnHelper.display({
+        header: 'Action',
+        Cell: ({ row }) => {
+            // <Button
+            //     sx={{
+            //         display: !row.original.transactionType === "WITHDRAW" && "none"
+            //     }}
+            //     component={Link}
+            //     to={`/dashboard/transactionList/edit/${row.original._id}`}
+            //     variant='contained'
+            //     size='small'
+            // >Edit</Button>
+            return (row.original.transactionType === "WITHDRAW" && row.original.status === "PENDING") && <ModalComponent
+                Content={EditTransaction}
+                contentData={row.original._id}
+                btnName={"Edit"}
+            />
+        },
     }),
 ];

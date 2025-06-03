@@ -1,4 +1,5 @@
 import { lazy } from "react";
+// import EditTransaction from "../pages/transaction/EditTransaction";
 const TransactionList = lazy(() => import("../pages/transaction/TransactionList"));
 const EditUser = lazy(() => import("../pages/userManagement/editUser/EditUser"));
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
@@ -10,4 +11,5 @@ export const routing = [
     { path: "userManagement/userList", element: <UserList /> },
     { path: "userManagement/editUser/:id", element: <EditUser /> },
     { path: "transactionList", element: <TransactionList /> },
+    // { path: "transactionList/edit/:id", element: <EditTransaction /> },
 ]

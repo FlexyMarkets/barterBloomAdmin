@@ -12,7 +12,7 @@ export const adminStateApis = createApi({
             return headers;
         }
     }),
-    tagTypes: ["userList",],
+    tagTypes: ["userList"],
     endpoints: (builder) => ({
         addFund: builder.mutation({
             query: (data) => ({
@@ -62,6 +62,14 @@ export const adminStateApis = createApi({
                 method: "PUT",
                 body: data
             })
+        }),
+        editTransaction: builder.mutation({
+            query: (data) => ({
+                url: "/transaction/approve-reject/withdraw",
+                method: "POST",
+                body: data
+            }),
+            invalidatesTags: ["userList"]
         }),
         transactionList: builder.query({
             query: ({ page = 1, sizePerPage = 10, status, transactionType, fromUserId, userId, startDate, endDate }) => {
@@ -143,6 +151,7 @@ export const adminStateApis = createApi({
 
 export const {
     useAddFundMutation,
+    useEditTransactionMutation,
     useUserListQuery,
     useGetUserByIdQuery,
     useUserProfileUpdateMutation,
