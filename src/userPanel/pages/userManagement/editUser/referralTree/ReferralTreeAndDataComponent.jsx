@@ -25,8 +25,6 @@ function ReferralTreeAndDataComponent() {
 
     const { data, isLoading } = useGetReferralListQuery({ userId: id }, { skip: !id })
 
-    console.log(data)
-
     const listData = data?.data ? parseReferralTree(data?.data) : [];
 
     function onReferralCodeClick(referralCode) {

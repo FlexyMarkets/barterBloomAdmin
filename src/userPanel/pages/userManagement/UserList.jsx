@@ -59,15 +59,12 @@ function UserList() {
         endDate: formattedToDate,
     });
 
-    console.log(isError)
-
     const userListData = listData?.data?.docs || [];
 
     const columns = useMemo(() => UserListColumnHeader, []);
     const data = useMemo(() => userListData, [userListData]);
 
     const handleFilterChange = useCallback((key, value) => {
-        console.log(key, value)
         setFilters((prev) => ({ ...prev, [key]: value }));
     }, []);
 

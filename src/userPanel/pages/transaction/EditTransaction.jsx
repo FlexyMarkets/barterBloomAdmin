@@ -34,8 +34,6 @@ function EditTransaction({ data: transactionId }) {
 
     const onSubmit = async (data) => {
 
-        console.log(data)
-
         try {
             const response = await editTransaction(data).unwrap();
 
